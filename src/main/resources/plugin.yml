@@ -1,0 +1,7 @@
+name: SpeedUHC
+version: 0.1
+author: NoReach
+main: net.venixnetwork.speeduhc.SpeedUHC
+commands:
+  feed:
+  top:
