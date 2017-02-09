@@ -2,6 +2,8 @@ package net.venixnetwork.speeduhc.managers;
 
 import com.sun.org.apache.regexp.internal.RE;
 import net.venixnetwork.speeduhc.SpeedUHC;
+import net.venixnetwork.speeduhc.enums.GameState;
+import net.venixnetwork.speeduhc.enums.StateManager;
 import net.venixnetwork.speeduhc.util.References;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
@@ -30,12 +32,6 @@ public class WorldManager {
             }
         }
         Bukkit.getServer().unloadWorld("speed_uhc", false);
-    }
-    public boolean isWorldReady(){
-        if (Bukkit.getWorld("speed_uhc") == null){
-            return false;
-        }
-        return true;
     }
     public void makeWorld(){
         Bukkit.getServer().createWorld(new WorldCreator("speed_uhc"));
@@ -81,6 +77,7 @@ public class WorldManager {
         }
     }
 
+
     public void genWorld(){
         Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "worldborder:wb speed_uhc setcorners 750 -750 -750 750");
         Bukkit.broadcastMessage(ChatColor.GREEN + "Successfully set border to 250x250");
@@ -116,6 +113,31 @@ public class WorldManager {
         Location l = new Location(w, 0, w.getHighestBlockYAt(0, 0), 0);
         if (l.getBlock().getType() == Material.BEDROCK) {
             l.getBlock().setType(Material.AIR);
+        }
+    }
+
+    public void endSpeedGame(){
+        for (Player pl : Bukkit.getServer().getOnlinePlayers()){
+            pl.kickPlayer(ChatColor.RED + "Thanks for playing this Speed UHC!");
+        }
+        StateManager.getIns().setGameState(GameState.PREPARING);
+        if (Bukkit.getWorld("speed_uhc") != null){
+            unloadWorld();
+            deleteWorld(Bukkit.getWorld("speed_uhc").getWorldFolder());
+        }
+        createSpeedGame();
+    }
+    public void createSpeedGame(){
+        if (Bukkit.getWorld("speed_uhc") == null){
+            StateManager.getIns().setGameState(GameState.GENERATING);
+            makeWorld();
+            new BukkitRunnable(){
+                @Override
+                public void run(){
+                    genWorld();
+                }
+            }.runTaskLater(SpeedUHC.plugin, 20 * 5);
+
         }
     }
 }

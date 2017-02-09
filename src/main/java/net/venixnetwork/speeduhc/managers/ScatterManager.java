@@ -24,6 +24,7 @@ public class ScatterManager {
     private static ScatterManager ins;
     private int scatterTicks = 9;
     private int toScatterInt = 1;
+    private final List<Player> ffaScatter = new ArrayList<>();
     private final List<Player> scatter = new ArrayList<>();
     public static ScatterManager getIns(){
         if (ins == null) {
@@ -40,7 +41,7 @@ public class ScatterManager {
         Location loc = new Location(speedW, x, speedW.getHighestBlockYAt(x, z), z);
         return loc;
     }
-    public void startScatter(){
+    /*public void startScatter(){
         Bukkit.getWorld("speed_uhc").setPVP(false);
         new BukkitRunnable(){
             @Override
@@ -77,10 +78,43 @@ public class ScatterManager {
 
             }
         }.runTaskTimer(SpeedUHC.plugin, scatterTicks, scatterTicks);
+    }*/
+    public void startScatter(){
+        StateManager.getIns().setGameState(GameState.SCATTERING);
+        new BukkitRunnable(){
+            @Override
+            public void run(){
+                if (toScatterInt < 0){
+                    startGame();
+                    ffaScatter.clear();
+                    this.cancel();
+                }
+                for (Player pl : Bukkit.getServer().getWorld(References.spawnWorld).getPlayers()) {
+                    ffaScatter.add(pl);
+                }
+                toScatterInt = Bukkit.getServer().getWorld(References.spawnWorld).getPlayers().size() - 1;
+                try {
+                    ffaScatter.get(toScatterInt);
+                } catch (IndexOutOfBoundsException e) {
+                    ffaScatter.remove(toScatterInt);
+                    toScatterInt = Bukkit.getServer().getWorld(References.spawnWorld).getPlayers().size() - 1;
+                }
+                Player pl = ffaScatter.get(toScatterInt);
+                if (pl != null){
+                    pl.teleport(scatterLocation());
+                    if (!PlayerManager.getIns().getPlayersPlaying().contains(pl.getName())){
+                        PlayerManager.getIns().getPlayersPlaying().add(pl.getName());
+                    }
+                }
+                if (ffaScatter.contains(pl)) {
+                    ffaScatter.remove(pl);
+                }
+                toScatterInt--;
+            }
+        }.runTaskTimer(SpeedUHC.plugin, scatterTicks, scatterTicks);
     }
 
     public void startGame(){
-        Bukkit.getWorld("speed_uhc").setPVP(true);
         StateManager.getIns().setGameState(GameState.INGAME);
         for (Player pl : Bukkit.getServer().getOnlinePlayers()){
             ItemStack is = new ItemStack(Material.COOKED_BEEF, 10);

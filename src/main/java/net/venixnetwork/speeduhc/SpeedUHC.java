@@ -16,6 +16,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import javax.swing.plaf.nimbus.State;
+import java.io.File;
 
 /**
  * Created by Ryan on 09/02/2017.
@@ -27,17 +28,14 @@ public class SpeedUHC extends JavaPlugin {
         registerCom();
         registerEvents();
         checkOnline();
-        WorldManager.getIns().makeWorld();
         new BukkitRunnable(){
             @Override
             public void run(){
                 if (Bukkit.getWorld("speed_uhc") == null){
-                    StateManager.getIns().setGameState(GameState.GENERATING);
                     WorldManager.getIns().makeWorld();
-                    WorldManager.getIns().genWorld();
                 }
             }
-        }.runTaskLater(this, 20 * 30);
+        }.runTaskLater(this, 20 * 5);
         StateManager.getIns().setGameState(GameState.LOBBY);
     }
 

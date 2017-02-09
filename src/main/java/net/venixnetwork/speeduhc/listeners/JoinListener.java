@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.potion.PotionEffect;
 
 /**
  * Created by Ryan on 09/02/2017.
@@ -35,5 +36,8 @@ public class JoinListener implements Listener{
         pl.sendMessage("");
         pl.sendMessage("§8§l§m---------------------------------------");
         e.setJoinMessage(References.prefix + "§a" + pl.getName() + " §7 has joined the game!");
+        for (PotionEffect effect : pl.getActivePotionEffects()){
+            pl.removePotionEffect(effect.getType());
+        }
     }
 }

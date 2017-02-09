@@ -51,11 +51,24 @@ public class DeathListener implements Listener {
                     new BukkitRunnable(){
                         @Override
                         public void run(){
-                            StateManager.getIns().setGameState(GameState.GENERATING);
-                            WorldManager.getIns().restartWorld();
+                            WorldManager.getIns().endSpeedGame();
                         }
                     }.runTaskLater(SpeedUHC.plugin, 20 * 5);
                 }
+            }
+        }else{
+            if (PlayerManager.getIns().getPlayersPlaying().contains(e.getEntity().getName())){
+                PlayerManager.getIns().getPlayersPlaying().remove(e.getEntity().getName());
+            }
+            if (PlayerManager.getIns().getPlayersPlaying().size() == 1){
+                Player winner = Bukkit.getPlayer(PlayerManager.getIns().getPlayersPlaying().get(0));
+                Bukkit.broadcastMessage(References.prefix + ChatColor.GREEN + "Congratulations to " + ChatColor.YELLOW + winner.getName() + ChatColor.GREEN + " on winning!");
+                new BukkitRunnable(){
+                    @Override
+                    public void run(){
+                        WorldManager.getIns().endSpeedGame();
+                    }
+                }.runTaskLater(SpeedUHC.plugin, 20 * 5);
             }
         }
 

@@ -21,5 +21,8 @@ public class DamageListeners implements Listener {
                 e.setCancelled(true);
             }
         }
+        if (StateManager.getIns().getGameState() == GameState.SCATTERING){
+            e.setCancelled(true);
+        }
     }
 }
