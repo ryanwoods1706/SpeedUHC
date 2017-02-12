@@ -3,10 +3,13 @@ package net.venixnetwork.speeduhc.listeners;
 import net.venixnetwork.speeduhc.enums.GameState;
 import net.venixnetwork.speeduhc.enums.StateManager;
 import net.venixnetwork.speeduhc.managers.RankManager;
+import net.venixnetwork.speeduhc.util.References;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 
 /**
@@ -25,5 +28,6 @@ public class LoginListener implements Listener {
                 e.setResult(PlayerLoginEvent.Result.KICK_OTHER);
             }
         }
+
     }
 }

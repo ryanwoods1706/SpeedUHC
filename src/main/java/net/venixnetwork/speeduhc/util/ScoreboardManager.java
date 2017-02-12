@@ -16,39 +16,32 @@ import java.util.*;
  */
 public class ScoreboardManager {
 
-    public static String[] cutUnranked(String[] content)
-    {
-        String[] elements = Arrays.copyOf(content, 16);
-
-        if(elements[0] == null)
-            elements[0] = "Unamed board";
-
-        if(elements[0].length() > 32)
-            elements[0] = elements[0].substring(0, 32);
-
-        for(int i = 1; i < elements.length; i++)
-            if(elements[i] != null)
-                if(elements[i].length() > 40)
-                    elements[i] = elements[i].substring(0, 40);
-
+    private String[] cutUnranked(String[] content) {
+        String[] elements = Arrays.copyOf(content, 15);
+        for (int i = 0; i < elements.length; i++) {
+            if (elements[i] == null) {
+                continue;
+            }
+            if (elements[i].length() > 48) {
+                elements[i] = elements[i].substring(0, 48);
+            }
+        }
         return elements;
     }
 
-    public static String cutRankedTitle(String title)
-    {
-        if(title == null)
-            return "Unamed board";
-
-        if(title.length() > 32)
-            return title.substring(0, 32);
-
-        return title;
+    private String cutName(String name) {
+        if (name == null) {
+            name = "Unamed board";
+        }
+        if (name.length() > 32) {
+            name = name.substring(0, 32);
+        }
+        return name;
     }
-
 
     public boolean unrankedSidebarDisplay(final Player p, String name, String[] elements) {
         elements = cutUnranked(elements);
-        name = cutRankedTitle(name);
+        name = cutName(name);
         try {
             if (p.getScoreboard() == null || p.getScoreboard() == Bukkit.getScoreboardManager().getMainScoreboard()
                     || p.getScoreboard().getObjectives().size() != 1) {
@@ -129,8 +122,4 @@ public class ScoreboardManager {
             return false;
         }
     }
-
-
-
 }
-

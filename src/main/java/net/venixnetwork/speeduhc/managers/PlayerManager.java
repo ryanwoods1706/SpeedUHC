@@ -1,7 +1,5 @@
 package net.venixnetwork.speeduhc.managers;
 
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,9 +11,9 @@ import java.util.List;
 public class PlayerManager {
 
     private static PlayerManager ins;
-    private int playerCount = 0;
-    private List<String> playersPlaying = new ArrayList<>();
-    private int neededPlayers = 2;
+    //private List<String> playersPlaying = new ArrayList<>();
+    private int neededPlayers = 16;
+    private List<String> playersLeft = new ArrayList<>();
     private HashMap<String, Integer> kills = new HashMap<String, Integer>();
 
 
@@ -26,8 +24,8 @@ public class PlayerManager {
         return ins;
     }
 
-    public int getPlayerCount(){ return playerCount;}
-    public List<String> getPlayersPlaying(){ return playersPlaying;}
+
+    //public List<String> getPlayersPlaying(){ return playersPlaying;}
     public int getNeededPlayers(){ return neededPlayers;}
     public int getKills(String plName){
         if (kills.containsKey(plName)){
@@ -43,13 +41,7 @@ public class PlayerManager {
         this.kills.put(plName, newKills);
     }
 
-    public void updatePlayerCount(){
-        int i = 0;
-        for (Player pl : Bukkit.getServer().getOnlinePlayers()){
-            i++;
-        }
-        this.playerCount = i;
-    }
+    public List<String> getPlayersLeft(){return playersLeft;}
 
 
 }

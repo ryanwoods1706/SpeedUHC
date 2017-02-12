@@ -1,5 +1,7 @@
 package net.venixnetwork.speeduhc.managers;
 
+import net.venixnetwork.speeduhc.enums.GameState;
+import net.venixnetwork.speeduhc.enums.StateManager;
 import net.venixnetwork.speeduhc.util.References;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -42,6 +44,7 @@ public class GameManager {
     }
 
     public void startDeathMatch(){
+        StateManager.getIns().setGameState(GameState.DEATHMATCH);
         Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "worldborder:wb speed_uhc setcorners 100 -100 -100 100");
         WorldManager.getIns().setWalls(100, Material.BEDROCK, 3);
         Bukkit.broadcastMessage(References.prefix + "§cBorder is now §c§l100 x 100");

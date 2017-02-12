@@ -25,56 +25,25 @@ public class WorldManager {
         return ins;
     }
 
-    private void unloadWorld(){
-        for (Player pl : Bukkit.getServer().getOnlinePlayers()){
-            if (pl.getWorld().getName().equals("speed_uhc")){
-                pl.kickPlayer(References.prefix + ChatColor.RED + "Server is restarting!");
-            }
-        }
-        Bukkit.getServer().unloadWorld("speed_uhc", false);
-    }
+
     public void makeWorld(){
         Bukkit.getServer().createWorld(new WorldCreator("speed_uhc"));
     }
-    private boolean deleteWorld(File path)
-    {
-        try
-        {
-            if (path.exists())
-            {
-                File[] files = path.listFiles();
-                for (int i = 0; i < files.length; i++) {
-                    if (files[i].isDirectory()) {
-                        deleteWorld(files[i]);
-                    } else {
-                        files[i].delete();
-                    }
+    public boolean delete(File file) {
+        if (file.isDirectory()) {
+            for (File subfile : file.listFiles()) {
+                if (!delete(subfile)) {
+                    return false;
                 }
             }
-            return path.delete();
         }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-        return false;
+        return file.delete();
     }
-    public void restartWorld()
-    {
-        System.out.println("Restarting world...");
-        int i = 0;
-        try
-        {
-            unloadWorld();
-            deleteWorld(Bukkit.getWorld("speed_uhc").getWorldFolder());
-            System.out.println("Deleted world");
-            Bukkit.getServer().shutdown();
-        }
-        catch (Exception e)
-        {
-            System.out.println("Exception, shutting down....");
-            Bukkit.getServer().shutdown();
-        }
+    public void deleteWorld(World world, String name){
+        World map = Bukkit.createWorld(new WorldCreator(name).environment(World.Environment.NORMAL).type(WorldType.NORMAL));
+        Bukkit.unloadWorld(map, false);
+        delete(world.getWorldFolder());
+        delete(world.getWorldFolder());
     }
 
 
@@ -117,13 +86,13 @@ public class WorldManager {
     }
 
     public void endSpeedGame(){
+        StateManager.getIns().setMOTD("Restarting");
         for (Player pl : Bukkit.getServer().getOnlinePlayers()){
             pl.kickPlayer(ChatColor.RED + "Thanks for playing this Speed UHC!");
         }
         StateManager.getIns().setGameState(GameState.PREPARING);
-        if (Bukkit.getWorld("speed_uhc") != null){
-            unloadWorld();
-            deleteWorld(Bukkit.getWorld("speed_uhc").getWorldFolder());
+        if (Bukkit.getServer().getWorld("speed_uhc") != null){
+            deleteWorld(Bukkit.getWorld("speed_uhc"), "speed_uhc");
         }
         createSpeedGame();
     }

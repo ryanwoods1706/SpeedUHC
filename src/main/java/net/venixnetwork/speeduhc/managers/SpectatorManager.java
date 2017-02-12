@@ -2,6 +2,7 @@ package net.venixnetwork.speeduhc.managers;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -54,6 +55,7 @@ public class SpectatorManager {
         meta.setDisplayName(ChatColor.GREEN  + "Spectating Tool");
         item.setItemMeta(meta);
         pl.getInventory().setItem(4, item);
+        pl.setGameMode(GameMode.CREATIVE);
         pl.setAllowFlight(true);
         pl.setFlying(true);
     }
