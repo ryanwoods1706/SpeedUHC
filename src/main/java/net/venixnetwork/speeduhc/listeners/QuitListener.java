@@ -40,14 +40,8 @@ public class QuitListener implements Listener {
             }
         }
         if (StateManager.getIns().getGameState() == GameState.SCATTERING){
-            if (PlayerManager.getIns().getPlayersLeft().contains(pl.getName())){
-                PlayerManager.getIns().getPlayersLeft().remove(pl.getName());
-            }
         }
         if (StateManager.getIns().getGameState() == GameState.INGAME){
-            if (PlayerManager.getIns().getPlayersLeft().contains(pl.getName())){
-                PlayerManager.getIns().getPlayersLeft().remove(pl.getName());
-            }
             if (Bukkit.getWorld("speed_uhc").getPlayers().size() == 1){
                 Player winner = Bukkit.getWorld("speed_uhc").getPlayers().get(0);
                 Bukkit.broadcastMessage(References.prefix + ChatColor.GREEN + "Congratulations to " + ChatColor.YELLOW + winner.getName() + ChatColor.GREEN + " on winning!");
@@ -58,8 +52,8 @@ public class QuitListener implements Listener {
                     }
                 }.runTaskLater(SpeedUHC.plugin, 20 * 5);
             }
-            if (PlayerManager.getIns().getPlayersLeft().size() == 1){
-                Player winner = Bukkit.getPlayer(PlayerManager.getIns().getPlayersLeft().get(0));
+            if (PlayerManager.getIns().getAlivePlayers() == 1){
+                Player winner = Bukkit.getPlayer(PlayerManager.getIns().getWinner());
                 Bukkit.broadcastMessage(References.prefix + ChatColor.GREEN + "Congratulations to " + ChatColor.YELLOW + winner.getName() + ChatColor.GREEN + " on winning!");
                 new BukkitRunnable(){
                     @Override

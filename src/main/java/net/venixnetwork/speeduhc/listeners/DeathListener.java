@@ -35,12 +35,9 @@ public class DeathListener implements Listener {
         if (e.getEntity().getKiller() != null){
             if (e.getEntity().getKiller() instanceof Player){
                 Player killer = e.getEntity().getKiller();
-                if (PlayerManager.getIns().getPlayersLeft().contains(victim.getName())){
-                    PlayerManager.getIns().getPlayersLeft().remove(victim.getName());
-                }
                 PlayerManager.getIns().updateKills(killer.getName(), 1);
-                if (PlayerManager.getIns().getPlayersLeft().size() == 1){
-                    Player winner = Bukkit.getPlayer(PlayerManager.getIns().getPlayersLeft().get(0));
+                if (PlayerManager.getIns().getAlivePlayers() == 1){
+                    Player winner = Bukkit.getPlayer(PlayerManager.getIns().getWinner());
                     Bukkit.broadcastMessage(References.prefix + ChatColor.GREEN + "Congratulations to " + ChatColor.YELLOW + killer.getName() + ChatColor.GREEN + " on winning!");
                     new BukkitRunnable(){
                         @Override
@@ -51,11 +48,8 @@ public class DeathListener implements Listener {
                 }
             }
         }else{
-            if (PlayerManager.getIns().getPlayersLeft().contains(victim.getName())){
-                PlayerManager.getIns().getPlayersLeft().remove(victim.getName());
-            }
-            if (PlayerManager.getIns().getPlayersLeft().size() == 1){
-                Player winner = Bukkit.getPlayer(PlayerManager.getIns().getPlayersLeft().get(0));
+            if (PlayerManager.getIns().getAlivePlayers() == 1){
+                Player winner = Bukkit.getPlayer(PlayerManager.getIns().getWinner());
                 Bukkit.broadcastMessage(References.prefix + ChatColor.GREEN + "Congratulations to " + ChatColor.YELLOW + winner.getName() + ChatColor.GREEN + " on winning!");
                 new BukkitRunnable(){
                     @Override
@@ -74,10 +68,7 @@ public class DeathListener implements Listener {
             skull.update();
             Block block = victim.getLocation().add(0.0D, 1.0D, 0.0D).getBlock();
             block.setData((byte) 1);
-            if (PlayerManager.getIns().getPlayersLeft().contains(victim.getName())){
-                PlayerManager.getIns().getPlayersLeft().remove(victim.getName());
-            }
-        };
+        }
         pl.spigot().respawn();
         World spawn = Bukkit.getWorld(References.spawnWorld);
         pl.teleport(spawn.getSpawnLocation());

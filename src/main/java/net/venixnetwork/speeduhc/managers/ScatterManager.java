@@ -102,9 +102,6 @@ public class ScatterManager {
                 Player pl = ffaScatter.get(toScatterInt);
                 if (pl != null){
                     pl.teleport(scatterLocation());
-                    if (!PlayerManager.getIns().getPlayersLeft().contains(pl.getName())){
-                        PlayerManager.getIns().getPlayersLeft().add(pl.getName());
-                    }
 
                 }
                 if (ffaScatter.contains(pl)) {

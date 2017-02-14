@@ -7,6 +7,7 @@ import net.venixnetwork.speeduhc.managers.PlayerManager;
 import net.venixnetwork.speeduhc.managers.SpectatorManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -18,17 +19,22 @@ import java.sql.Ref;
 public class Timer extends BukkitRunnable {
     private ScoreboardManager scoreboard = new ScoreboardManager();
     private int second;
+    private int alive;
     private int dmatchTime = 600;
     public void run() {
+        PlayerManager.getIns().alivePlayers = 0;
         second ++;
         dmatchTime--;
         for (Player p : Bukkit.getServer().getOnlinePlayers()){
+            if (!p.isDead() && !p.isFlying() && p.getGameMode().equals(GameMode.SURVIVAL) && !SpectatorManager.getIns().isSpec(p) && p.getWorld().getName().equalsIgnoreCase("speed_uhc")){
+                PlayerManager.getIns().alivePlayers++;
+            }
             int x = PlayerManager.getIns().getKills(p.getName());
             this.scoreboard.unrankedSidebarDisplay(p, References.sbTitle, new String[]{
                     ChatColor.GREEN.toString(),
                     ChatColor.AQUA + "Time: §f " + GameManager.getIns().getTime(second),
                     ChatColor.BLACK.toString(),
-                    ChatColor.AQUA + "Players Alive: §f" + PlayerManager.getIns().getPlayersLeft().size(),
+                    ChatColor.AQUA + "Players Alive: §f" + PlayerManager.getIns().getAlivePlayers(),
                     ChatColor.AQUA + "Watching: §f" + SpectatorManager.getIns().getSpecs().size(),
                     ChatColor.AQUA + "Your Kills: §f" + x,
                     ChatColor.AQUA.toString(),
@@ -67,7 +73,7 @@ public class Timer extends BukkitRunnable {
                         ChatColor.GREEN.toString(),
                         ChatColor.AQUA + "Time: §f " + GameManager.getIns().getTime(second),
                         ChatColor.BLACK.toString(),
-                        ChatColor.AQUA + "Players Alive: §f" + PlayerManager.getIns().getPlayersLeft().size(),
+                        ChatColor.AQUA + "Players Alive: §f" + PlayerManager.getIns().getAlivePlayers(),
                         ChatColor.AQUA + "Watching: §f" + SpectatorManager.getIns().getSpecs().size(),
                         ChatColor.AQUA + "Your Kills: §f" + x,
                         ChatColor.AQUA.toString(),
